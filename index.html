@@ -3,9 +3,9 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Playbook - Misión 1</title>
+    <title>Playbook - Misión</title>
     <link rel="stylesheet" href="styles.css">
-    <style>
+     <style>
         body {
             font-family: Arial, sans-serif;
             line-height: 1.6;
@@ -45,28 +45,6 @@
             border: 1px solid #ddd;
             margin-bottom: 10px;
         }
-        .section {
-            margin-bottom: 15px;
-        }
-        .step-title {
-            font-weight: bold;
-            color: #333;
-            margin-bottom: 5px;
-        }
-        .section-title {
-            font-weight: bold;
-            color: #333;
-            margin-bottom: 5px;
-        }
-        .dialogue {
-            background-color: #f0f0f0;
-            border: 1px solid #ddd;
-            border-radius: 10px;
-            padding: 10px;
-            margin: 10px 0;
-            text-align: left;
-            font-style: italic;
-        }
         .dropdown {
             margin-bottom: 20px;
         }
@@ -79,28 +57,34 @@
             font-size: 1.5em;
             margin-bottom: 10px;
         }
-        .note {
-            background-color: #ffeb3b;
-            padding: 10px;
-            border: 1px solid #ddd;
-            margin-bottom: 10px;
-        }
-        .nav-buttons {
-            display: flex;
-            justify-content: space-between;
-            margin-top: 10px;
-        }
-        .nav-buttons button {
-            background-color: #4CAF50;
-            color: white;
-            padding: 10px 20px;
-            border: none;
-            cursor: pointer;
-        }
-        .nav-buttons button:disabled {
-            background-color: #ddd;
-            cursor: not-allowed;
-        }
+.section {
+    margin-bottom: 15px;
+}
+
+.step-title {
+    font-weight: bold;
+    color: #333;
+    margin-bottom: 5px;
+    text-align: left;
+}
+
+.section-title {
+    font-weight: bold;
+    color: #333;
+    margin-bottom: 5px;
+    text-align: right;
+}
+
+.dialogue {
+    background-color: #f0f0f0;
+    border: 1px solid #ddd;
+    border-radius: 10px;
+    padding: 10px;
+    margin: 10px 0;
+    text-align: right;
+    font-style: italic;
+}
+
     </style>
     <script>
         function toggleContent(id) {
@@ -112,37 +96,130 @@
             }
         }
 
+        function updateDifficulty() {
+            // Ocultar todas las versiones de la Actividad 5
+            document.getElementById('activity-51').style.display = 'none';
+            document.getElementById('activity-52').style.display = 'none';
+            document.getElementById('activity-53').style.display = 'none';
+
+            var selectedLevel = document.getElementById('level-select').value;
+
+            // Mostrar la versión correspondiente según el nivel seleccionado
+            if (selectedLevel === 'Kinder 1') {
+                document.getElementById('activity-51').style.display = 'block';
+                document.getElementById('activity-3').style.display = 'none'; // Ocultar Actividad 3 para Kinder 1
+            } else {
+                // Mostrar Actividad 3 y la actividad correspondiente a Kinder 2 o Kinder 3
+                document.getElementById('activity-3').style.display = 'block';
+                if (selectedLevel === 'Kinder 2') {
+                    document.getElementById('activity-52').style.display = 'block';
+                } else if (selectedLevel === 'Kinder 3') {
+                    document.getElementById('activity-53').style.display = 'block';
+                }
+            }
+        }
+
         function updateActivities() {
             var selectedTime = document.getElementById('time-select').value;
-            var activities = document.getElementsByClassName('activity');
 
+            // Actualizar el título con el tiempo seleccionado
             document.getElementById('selected-time').innerText = "Tiempo efectivo de clase: " + selectedTime + " minutos";
 
+            // Asignar tiempos proporcionales a las actividades 4 y 5, y sus pasos
+            var activity4Time, activity4StepTime, activity5Time, activity5StepTime;
+
+            if (selectedTime === '50') {
+                activity4Time = 13; // Tiempo total para la actividad 4
+                activity4StepTime = 9; // Tiempo para el paso en la actividad 4
+                activity5Time = 18.5; // Tiempo total para la actividad 5
+                activity5StepTime = 15; // Tiempo para el paso en la actividad 5
+            } else if (selectedTime === '40') {
+                activity4Time = 10;
+                activity4StepTime = 6;
+                activity5Time = 13.5;
+                activity5StepTime = 10;
+            } else if (selectedTime === '30') {
+                activity4Time = 7;
+                activity4StepTime = 3;
+                activity5Time = 10;
+                activity5StepTime = 8.5;
+            }
+
+            // Actualizar los tiempos en el HTML
+            document.getElementById('activity-4-time').innerText = "⏰ Tiempo: " + activity4Time + " minutos";
+            document.getElementById('activity-4-step-time').innerText = "(" + activity4StepTime + " minutos)";
+            document.getElementById('activity-51-time').innerText = "⏰ Tiempo: " + activity5Time + " minutos";
+            document.getElementById('activity-51-step-time').innerText = "(" + activity5StepTime + " minutos)";
+            document.getElementById('activity-52-time').innerText = "⏰ Tiempo: " + activity5Time + " minutos";
+            document.getElementById('activity-52-step-time').innerText = "(" + activity5StepTime + " minutos)";
+            document.getElementById('activity-53-time').innerText = "⏰ Tiempo: " + activity5Time + " minutos";
+            document.getElementById('activity-53-step-time').innerText = "(" + activity5StepTime + " minutos)";
+
+            // Actualizar el contenido del diálogo del maestro dinámicamente
+            document.getElementById('activity-4-dialogue').innerHTML = 
+                'Ahora, vamos a empezar a construir. Tienen ' + activity4StepTime + ' minutos para usar sus ladrillos y crear lo que se les ocurra. ¡Listos, genios? ¡3, 2, 1, a construir! ⏰';
+            document.getElementById('activity-52-dialogue').innerHTML = 
+                '¡Hora de construir, genios! Tienen ' + activity5StepTime + ' minutos para crear su cuadrado. ¡Vamos a construir algo increíble! ⏰';
+           document.getElementById('activity-53-dialogue').innerHTML = 
+                '¡Hora de construir, genios! Tienen ' + activity5StepTime + ' minutos para crear su cuadrado. ¡Vamos a construir algo increíble! ⏰';
+
+            // Mostrar todas las actividades por defecto
+            var activities = document.getElementsByClassName('activity');
             for (var i = 0; i < activities.length; i++) {
                 activities[i].style.display = 'block';
             }
 
-            // Aquí se puede agregar lógica para ocultar actividades en función del tiempo seleccionado
+            // Ocultar actividades según el tiempo seleccionado
+            if (selectedTime === '40') {
+
+
+            } else if (selectedTime === '30') {
+                document.getElementById('activity-2').style.display = 'none';
+
+            }
+
+            // Asegurarse de que sólo se muestra la actividad correspondiente al grado seleccionado
+            updateDifficulty();
         }
 
-        function navigateTo(id) {
-            var element = document.getElementById(id);
-            window.scrollTo({
-                top: element.offsetTop,
-                behavior: 'smooth'
-            });
-        }
+        window.onload = function() {
+            // Asignar Kinder 1 como valor inicial y ejecutar updateDifficulty
+            document.getElementById('level-select').value = 'Kinder 1';
+            updateDifficulty(); // Ejecutar para inicializar la visualización correcta
+            updateActivities(); // Asegurar que todo esté sincronizado desde el inicio
+        };
     </script>
 </head>
-<body onload="updateActivities()">
+<body>
 
 <div class="header">
-    <h1>Playbook - K1- M01</h1>
+    <h1>Playbook - K1 - M01</h1>
 </div>
 
-    <h2 id="selected-time" class="time-title">Tiempo efectivo de clase: 30 minutos</h2>
+<div class="container">
+    <!-- Dropdown para seleccionar el tiempo -->
+    <div class="dropdown">
+        <label for="time-select">Tiempo efectivo de Clase:</label>
+        <select id="time-select" onchange="updateActivities()">
+            <option value="50">50 minutos</option>
+            <option value="40">40 minutos</option>
+            <option value="30">30 minutos</option>
+        </select>
+    </div>
 
-    <!-- Actividad 1 (3 pasos) -->
+    <!-- Dropdown para seleccionar el grado -->
+    <div class="dropdown">
+        <label for="level-select">Selecciona el Grado:</label>
+        <select id="level-select" onchange="updateDifficulty()">
+            <option value="Kinder 1">Kinder 1</option>
+            <option value="Kinder 2">Kinder 2</option>
+            <option value="Kinder 3">Kinder 3</option>
+        </select>
+    </div>
+
+    <h2 id="selected-time" class="time-title">Tiempo efectivo de clase: 50 minutos</h2>
+
+    <!-- Actividad 1 -->
     <div id="activity-1" class="activity">
         <div class="banner" onclick="toggleContent('saludo_ritual')">
             <div class="title">
@@ -153,7 +230,7 @@
         </div>
         <div id="saludo_ritual" class="content">
             <div class="section">
-                <div class="step-title">Paso 1 (2 minutos): Proyectar Diapositiva 2 "Gnius Club"</div>
+                <div class="step-title">Paso 1 (2 minutos): Proyectar Diapositiva 2 "Gnius Club". Maestros: Saluden a cada Genio al ingresar al aula y establezcan un ambiente agradable.</div>
                 <div class="section-title">Diálogo del Maestro</div>
                 <div class="dialogue">🎉 ¡Hola, genios! 🎉 ¡Qué emoción verlos hoy! ¿Están listos para una nueva aventura súper divertida? ¡Vamos a aprender y jugar juntos! 🤩</div>
             </div>
@@ -170,10 +247,9 @@
         </div>
     </div>
 
-    <!-- Espacio para más actividades -->
-<!-- Actividad 2 (2 pasos) -->
-<div id="activity-2" class="activity">
-    <div class="banner" onclick="toggleContent('cancion_baile')">
+    <!-- Actividad 2 -->
+    <div id="activity-2" class="activity">
+        <div class="banner" onclick="toggleContent('cancion_baile')">
         <div class="title">
             <span>📚 Actividad 2: Canción y Baile del Día (2 pasos)</span>
             <span>⏰ Tiempo: 3.5 minutos</span>
@@ -192,10 +268,11 @@
             <div class="dialogue">¡Vamos a seguir el ritmo de la canción! 🐞 Levanten los brazos, muevan los pies y sigan a los bichitos mientras cuentan los números. ¡Vamos genios, a disfrutar y aprender juntos! 🌟</div>
         </div>
     </div>
-</div>
-<!-- Actividad 3 (6 pasos) -->
-<div id="activity-3" class="activity">
-    <div class="banner" onclick="toggleContent('formacion_equipos')">
+    </div>
+
+    <!-- Actividad 3 -->
+    <div id="activity-3" class="activity">
+        <div class="banner" onclick="toggleContent('formacion_equipos')">
         <div class="title">
             <span>📚 Actividad 3: Formación de Equipos (6 pasos)</span>
             <span>⏰ Tiempo: 6 minutos</span>
@@ -204,7 +281,7 @@
     </div>
     <div id="formacion_equipos" class="content">
         <div class="section">
-            <div class="step-title">Paso 1 (0.5 minuto): Proyectar Diapositiva 4 "Formación de Equipos"</div>
+            <div class="step-title">Paso 1 (0.5 minutos): Proyectar Diapositiva 4 "Formación de Equipos"</div>
             <div class="section-title">Diálogo del Maestro</div>
             <div class="dialogue">Genios, ¿sabían que Gnius Club es como un laboratorio mágico? ✨ Aquí vamos a aprender muchas cosas nuevas mientras jugamos juntos.</div>
         </div>
@@ -232,36 +309,39 @@
             <div class="step-title">Paso 6 (3 minutos): Mantener la Diapositiva 4</div>
             <div class="section-title">Diálogo del Maestro</div>
             <div class="dialogue">Yo voy a ayudar a formar los grupos, y los maestros que me acompañan también van a ayudar. Cuando estén en su equipo, denle la bienvenida a sus compañeros con una gran sonrisa y un 'hola'. ¡Vamos a hacer los mejores equipos de genios! 💪</div>
-        </div>
-    </div>
 </div>
-<!-- Actividad 4 (5 pasos) -->
-<div id="activity-4" class="activity">
-    <div class="banner" onclick="toggleContent('actividad_calentamiento')">
+</div>
+    </div>
+
+    <!-- Actividad 4 -->
+    <div id="activity-4" class="activity">
+       <div class="banner" onclick="toggleContent('actividad_calentamiento')">
         <div class="title">
             <span>📚 Actividad 4: Actividad de Calentamiento (5 pasos)</span>
-            <span>⏰ Tiempo: 7 minutos</span>
+            <span id="activity-4-time">⏰ Tiempo: 13 minutos</span>
         </div>
         <div class="subtitle">Exploración con ladrillos</div>
     </div>
     <div id="actividad_calentamiento" class="content">
         <div class="section">
-            <div class="step-title">Paso 1 (0.5 minuto): Proyectar Diapositiva 5 "Exploración con Ladrillos"</div>
+            <div class="step-title">Paso 1 (0.5 minutos): Proyectar Diapositiva 5 "Exploración con Ladrillos"</div>
             <div class="section-title">Diálogo del Maestro</div>
             <div class="dialogue">Genios, ¿ven estos ladrillos? Hoy es la primera vez que los vamos a usar, ¡y son súper divertidos!</div>
         </div>
         <div class="section">
-            <div class="step-title">Paso 2 (0.5 minuto): Mantener la Diapositiva 5</div>
+            <div class="step-title">Paso 2 (0.5 minutos): Mantener la Diapositiva 5</div>
             <div class="section-title">Diálogo del Maestro</div>
             <div class="dialogue">Cada uno de ustedes va a recibir 10 ladrillos. ¡Quiero que usen su imaginación para construir lo que quieran! No hay reglas, solo exploren y diviértanse. ¡Todo lo que construyan estará genial! 🧱</div>
         </div>
         <div class="section">
-            <div class="step-title">Paso 3 (3 minutos): Usar el temporizador visual para medir el tiempo de construcción</div>
+            <div class="step-title">Paso 3 <span id="activity-4-step-time">(X minutos)</span>: Usar el temporizador visual para medir el tiempo de construcción</div> <!-- Este tiempo se actualizará dinámicamente -->
             <div class="section-title">Diálogo del Maestro</div>
-            <div class="dialogue">Ahora, vamos a empezar a construir. Tienen 3 minutos para usar sus ladrillos y crear lo que se les ocurra. ¡Listos, genios? ¡3, 2, 1, a construir! ⏰</div>
+            <div class="dialogue" id="activity-4-dialogue">
+                    Ahora, vamos a empezar a construir. Tienen 9 minutos para usar sus ladrillos y crear lo que se les ocurra. ¡Listos, genios? ¡3, 2, 1, a construir! ⏰
+                </div>
         </div>
         <div class="section">
-            <div class="step-title">Paso 4 (2 minuto): Mantener el cronómetro visible mientras termina el tiempo</div>
+            <div class="step-title">Paso 4 (2 minutos): Mantener el cronómetro visible mientras termina el tiempo</div>
             <div class="section-title">Diálogo del Maestro</div>
             <div class="dialogue">¡Genios, se acabó el tiempo! Ahora, quiero que miren lo que construyeron. ¿No está genial? 🎉 Compartan con sus compañeros de equipo lo que hicieron. Díganles qué es, cómo lo hicieron, y escuchen lo que ellos hicieron también.</div>
         </div>
@@ -271,17 +351,57 @@
             <div class="dialogue">¡Qué increíbles creaciones, genios! Cada uno de ustedes tiene una imaginación brillante. 🌟 Esto es solo el comienzo de lo que pueden hacer con estos ladrillos. ¡Vamos a seguir construyendo y creando cosas asombrosas juntos!</div>
         </div>
     </div>
-</div>
-<!-- Actividad 5 (5 pasos) -->
-<div id="activity-5" class="activity">
-    <div class="banner" onclick="toggleContent('desafio_guiado')">
+    </div>
+
+    <!-- Actividad 5 - Versión 1 (Kinder 1) -->
+    <div id="activity-51" class="activity" style="display: none;">
+       <div class="banner" onclick="toggleContent('desafio_guiado_51')">
         <div class="title">
             <span>📚 Actividad 5: Desafío Guiado (5 pasos)</span>
-            <span>⏰ Tiempo: 8.5 minutos</span>
+            <span id="activity-51-time">⏰ Tiempo: 18.5 minutos</span>
+        </div>
+        <div class="subtitle">Construyendo Individualmente</div>
+    </div>
+    <div id="desafio_guiado_51" class="content">
+        <div class="section">
+            <div class="step-title">Paso 1 (1 minuto): Proyectar Diapositiva 7 "Desafío Guiado: Construyendo". Maestros: Asegúrense de que cada niño tenga sus 10 ladrillos listos.</div>
+            <div class="section-title">Diálogo del Maestro</div>
+            <div class="dialogue">Genios, ahora que ya exploraron sus ladrillos, ¡es hora de un desafío divertido! Vamos a trabajar de forma individual.</div>
+        </div>
+        <div class="section">
+            <div class="step-title">Paso 2 (0.5 minuto): Mantener la Diapositiva 7. Maestros: asegúrense de que los genios entiendan que van a construir un cuadrado lo suficientemente grande para que puedan sentarse dentro.</div>
+            <div class="section-title">Diálogo del Maestro</div>
+            <div class="dialogue">El desafío es construir un cuadrado con todos sus ladrillos, ¡pero aquí está lo divertido! El cuadrado tiene que ser lo suficientemente grande para que ustedes puedan sentarse dentro de él. 🧱 ¡Vamos a hacerlo juntos!</div>
+        </div>
+        <div class="section">
+            <div class="step-title">Paso 3 <span id="activity-51-step-time">(15 minutos)</span>: Utilizar el temporizador visual para medir el tiempo del desafío</div>
+            <div class="section-title">Diálogo del Maestro</div>
+            <div class="dialogue">¡Hora de construir, genios! Primero, vamos a tomar dos bloques grandes. Uno, dos. ¿Listos? Vamos a ponerlos en el suelo. Este será el primer lado del cuadrado. Ahora, pongamos otros dos bloques al lado del primero, pero en línea recta. Este será el segundo lado del cuadrado. Para el tercer lado, colocaremos otros dos bloques, pero esta vez los pondremos perpendicular al segundo bloque, formando una esquina. Finalmente, ponemos los últimos bloques para cerrar el cuadrado. Estos bloques van a tocar tanto el primer bloque como el tercero.</div>
+        </div>
+        <div class="section">
+            <div class="step-title">Paso 4 (0.5 minuto): Mantener el cronómetro visible mientras continúa la construcción</div>
+            <div class="section-title">Diálogo del Maestro</div>
+            <div class="dialogue">¡Si necesitan ayuda, no duden en pedirla! Los maestros están aquí para ayudarlos a hacer un trabajo asombroso. 🌟</div>
+        </div>
+        <div class="section">
+            <div class="step-title">Paso 5 (1 minutos): Proyectar Diapositiva 8 "¡Lo lograron!"</div>
+            <div class="section-title">Diálogo del Maestro</div>
+            <div class="dialogue">¡Tiempo! Ahora, quiero que se sienten dentro de su cuadrado y vean lo que construyeron. ¿Caben? ¡Genial! 🎉 Esto es solo el comienzo de lo que pueden construir. ¡Estoy muy orgulloso de ustedes!</div>
+        </div>
+    </div>
+    </div>
+
+
+    <!-- Actividad 5 - Versión 2 (Kinder 2) -->
+    <div id="activity-52" class="activity" style="display: none;">
+ <div class="banner" onclick="toggleContent('desafio_guiado_52')">
+        <div class="title">
+            <span>📚 Actividad 5: Desafío Guiado (5 pasos)</span>
+            <span id="activity-52-time">⏰ Tiempo: 18.5 minutos</span>
         </div>
         <div class="subtitle">Construyendo en Parejas</div>
     </div>
-    <div id="desafio_guiado" class="content">
+    <div id="desafio_guiado_52" class="content">
         <div class="section">
             <div class="step-title">Paso 1 (1 minuto): Proyectar Diapositiva 7 "Desafío Guiado: Construyendo en Parejas"</div>
             <div class="section-title">Diálogo del Maestro</div>
@@ -293,9 +413,11 @@
             <div class="dialogue">El desafío es construir un cuadrado con todos sus ladrillos, ¡pero aquí está lo divertido! El cuadrado tiene que ser lo suficientemente grande para que ustedes dos puedan sentarse dentro de él. 🧱 ¡Vamos a ver cómo lo hacen!</div>
         </div>
         <div class="section">
-            <div class="step-title">Paso 3 (5 minutos): Utilizar el temporizador visual para medir el tiempo del desafío</div>
+            <div class="step-title">Paso 3 <span id="activity-52-step-time">(15 minutos)</span>: Utilizar el temporizador visual para medir el tiempo del desafío</div>
             <div class="section-title">Diálogo del Maestro</div>
-            <div class="dialogue">¡Hora de construir, genios! Tienen 5 minutos para crear su cuadrado. ¡Vamos a construir algo increíble! ⏰</div>
+            <div class="dialogue" id="activity-52-dialogue">
+                    ¡Hora de construir, genios! Tienen 15 minutos para crear su cuadrado. ¡Vamos a construir algo increíble! ⏰
+                </div>
         </div>
         <div class="section">
             <div class="step-title">Paso 4 (0.5 minuto): Mantener el cronómetro visible mientras continúa la construcción</div>
@@ -309,9 +431,50 @@
         </div>
     </div>
 </div>
-<!-- Actividad 6 (3 pasos) -->
-<div id="activity-6" class="activity">
-    <div class="banner" onclick="toggleContent('honor_dojo')">
+
+       <!-- Actividad 5 - Versión 3 (Kinder 3) -->
+    <div id="activity-53" class="activity" style="display: none;">
+ <div class="banner" onclick="toggleContent('desafio_guiado_53')">
+        <div class="title">
+            <span>📚 Actividad 5: Desafío Guiado (5 pasos)</span>
+            <span id="activity-53-time">⏰ Tiempo: 18.5 minutos</span>
+        </div>
+        <div class="subtitle">Construyendo en Parejas</div>
+    </div>
+    <div id="desafio_guiado_53" class="content">
+        <div class="section">
+            <div class="step-title">Paso 1 (1 minuto): Proyectar Diapositiva 7 "Desafío Guiado: Construyendo en Parejas"</div>
+            <div class="section-title">Diálogo del Maestro</div>
+            <div class="dialogue">Genios, ahora que ya exploraron sus ladrillos, ¡es hora de un desafío divertido! Vamos a trabajar en parejas, así que junten sus ladrillos con los de un compañero.</div>
+        </div>
+        <div class="section">
+            <div class="step-title">Paso 2 (0.5 minuto): Mantener la Diapositiva 7</div>
+            <div class="section-title">Diálogo del Maestro</div>
+            <div class="dialogue">El desafío es construir un cuadrado con todos sus ladrillos, ¡pero aquí está lo divertido! El cuadrado tiene que ser lo suficientemente grande para que ustedes dos puedan sentarse dentro de él. 🧱 ¡Vamos a ver cómo lo hacen!</div>
+        </div>
+        <div class="section">
+            <div class="step-title">Paso 3 <span id="activity-53-step-time">(15 minutos)</span>: Utilizar el temporizador visual para medir el tiempo del desafío</div>
+            <div class="section-title">Diálogo del Maestro</div>
+            <div class="dialogue" id="activity-53-dialogue">
+                    ¡Hora de construir, genios! Tienen 15 minutos para crear su cuadrado. ¡Vamos a construir algo increíble! ⏰
+                </div>
+        </div>
+        <div class="section">
+            <div class="step-title">Paso 4 (0.5 minuto): Mantener el cronómetro visible mientras continúa la construcción</div>
+            <div class="section-title">Diálogo del Maestro</div>
+            <div class="dialogue">Genios, recuerden que pueden hablar entre ustedes y decidir cómo quieren organizar los ladrillos. ¡Si necesitan ayuda, no duden en pedirla! Los maestros están aquí para ayudarlos a hacer un trabajo asombroso. 🌟</div>
+        </div>
+        <div class="section">
+            <div class="step-title">Paso 5 (1 minutos): Proyectar Diapositiva 8 "¡Lo lograron!"</div>
+            <div class="section-title">Diálogo del Maestro</div>
+            <div class="dialogue">¡Tiempo! Ahora, quiero que se sienten dentro de su cuadrado y vean lo que construyeron. ¿Caben los dos? ¡Genial! 🎉 Esto es solo el comienzo de lo que pueden construir cuando trabajan en equipo. ¡Estoy muy orgulloso de ustedes!</div>
+        </div>
+    </div>
+</div>
+
+    <!-- Actividad 6 -->
+    <div id="activity-6" class="activity">
+       <div class="banner" onclick="toggleContent('honor_dojo')">
         <div class="title">
             <span>📚 Actividad 6: Honor The Dojo y Despedida (3 pasos)</span>
             <span>⏰ Tiempo: 3 minutos</span>
@@ -334,17 +497,12 @@
             <div class="section-title">Diálogo del Maestro</div>
             <div class="dialogue">Ahora es momento de decir adiós, pero no se preocupen, porque nos veremos muy pronto para más aventuras. ¡Gracias por venir hoy, genios! ¡Nos vemos en la próxima misión! 👋</div>
         </div>
+        </div>
     </div>
 </div>
 
-<!-- Scripts adicionales para manejar las opciones de recorte -->
-
-</div> <!-- Cierre del container -->
-
-<!-- Scripts adicionales si es necesario -->
-<script>
-    // Agregar scripts adicionales aquí si es necesario
-</script>
+</body>
+</html>
 
 </body>
 </html>
